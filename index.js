@@ -7,7 +7,10 @@ const path = require('path')
 const generateTeam = require('./src/pagetemplate');
 const teamMembers = [];
 
+
+// Function to create managers
 function appMenu() {
+    function createManager() {
     console.log('Creating Manager');
     inqurier.prompt([
         {
@@ -53,7 +56,7 @@ function appMenu() {
             }
             return true;
             }
-        },
+        }, 
     ])
 
     .then((answers) => {
@@ -63,3 +66,161 @@ function appMenu() {
         createTeam();
     })
 } 
+
+// Whole Team Properties
+function createTeam() {
+    inqurier.prompt([
+        {
+            type: 'list',
+            name: 'teamMember',
+            message: 'What type of team memebr would you like to add?',
+            choices: ['Engineer', 'Intern', 'Quit']
+        },
+    ])
+    .then((answers) => {
+        switch (answers.teamMember) {
+            case 'Engineers':
+                createEngineer();
+                break;
+            case 'Intern':
+                createIntern();
+                break;
+            case 'Quit':
+                endTeamCreation()
+                break;
+        }
+    })
+}
+
+// Intern properties
+function createIntern() {
+    console.log('Creating Intern');
+    inqurier.prompt([
+        {
+            type:'input',
+            name: 'internName',
+            message: "What is your intern's name?",
+            validate: function (value) {
+                if (value === '') {
+                    return 'Please enter a valid name';
+                }
+                return true;
+            }
+        },
+        {
+            type:'input',
+            name: 'internId',
+            message: "What is your intern's ID?",
+            validate: function (value) {
+                if (value === '') {
+                    return 'Please enter a valid ID ';
+                }
+                return true;
+            }
+        },
+        {
+            type:'input',
+            name: 'internEmail',
+            message: "What is your intern's email?",
+            validate: function (value) {
+                if (value === '') {
+                    return 'Please enter a valid email';
+                }
+                return true;
+            }
+        },
+        {
+            type:'input',
+            name: 'internSchool',
+            message: "What school did the intern attend at?",
+            validate: function (value) {
+                if (value === '') {
+                    return 'Please enter a valid school';
+                }
+                return true;
+            }
+        },
+    ])
+    .then((answers) => {
+        const intern = new Intern(answers.internName, answers.internId, answers.internEmail, answers.internSchool);
+        teamMembers.push(intern);
+        console.log(teamMembers);
+        createTeam();
+    })
+}
+
+// Engineer Properties
+function createEngineer() {
+    console.log('Creating Engineer');
+    inqurier.prompt([
+        {
+            type:'input',
+            name: 'engineerName',
+            message: "What is your engineer's name?",
+            validate: function (value) {
+                if (value=='') {
+                    return 'Please enter a valid name';
+                }
+                return true;
+            }
+        },
+        {
+            type:'input',
+            name: 'engineerId',
+            message: "What is your engineer's id?",
+            validate: function (value) {
+                if (value=='') {
+                    return 'Please enter a valid id';
+                }
+                return true;
+            }
+        },
+        {
+            type:'input',
+            name: 'engineerEmail',
+            message: "What is your engineer's email?",
+            validate: function (value) {
+                if (value=='') {
+                    return 'Please enter a valid email';
+                }
+                return true;
+            }
+        },
+        {
+            type:'input',
+            name: 'engineerGithub',
+            message: "What is your engineer's github username?",
+            validate: function (value) {
+                if (value=='') {
+                    return 'Please enter a valid github username';
+                }
+                return true;
+            }
+        },
+    ])
+    .then((answers) => {
+        const engineer = new Engineer(answers.engineerName, answers.engineerId, answers.engineerEmail, answers.engineerGithub);
+        teamMembers.push(engineer);
+        console.log(teamMembers);
+        createTeam();
+    })
+}
+
+// End Team Creation function 
+    function endTeamCreation() {
+        console.log("Ending Team Creation");
+        console.log(teamMembers);
+        const html = generateTeam(teamMembers);
+        fs.writeFile(path.join(__dirname, "dist", "team.html"), html, function (err) {
+            if (err) {
+                return console.log(err);
+            }
+            console.log("Success!");
+        });
+    }
+
+     createManager();
+}
+
+
+appMenu();
