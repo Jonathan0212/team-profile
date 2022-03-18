@@ -21,7 +21,7 @@ test('correctly gets the employee ID', () => {
     const id = 1;
     const email = 'LucasNixon@gmail.com';
     const employee = new Employee(name, id, email);
-    expect(employee.getID()).toBe(id);
+    expect(employee.getId()).toBe(id);
 });
 
 test('correctly gets employee role', () => {
