@@ -79,7 +79,7 @@ function createTeam() {
     ])
     .then((answers) => {
         switch (answers.teamMember) {
-            case 'Engineers':
+            case 'Engineer':
                 createEngineer();
                 break;
             case 'Intern':
