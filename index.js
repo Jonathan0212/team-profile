@@ -211,7 +211,7 @@ function createEngineer() {
         console.log("Ending Team Creation");
         console.log(teamMembers);
         const html = generateTeam(teamMembers);
-        fs.writeFile(path.join(__dirname, "dist", "team.html"), html, function (err) {
+        fs.writeFile(path.join(__dirname, "dist", "index.html"), html, function (err) {
             if (err) {
                 return console.log(err);
             }
